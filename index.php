@@ -94,7 +94,7 @@
     <head>
         <!-- style=" background-color: rgb(61, 65, 61); color: white" -->
         <div class="header"> 
-            <h2>Proficieny Test 1</h2>
+            <h2>Proficieny Test 2</h2>
         </div>
 
         <link rel="stylesheet" href="style.css">
