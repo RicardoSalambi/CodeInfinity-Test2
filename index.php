@@ -77,25 +77,6 @@
             $id = generateUniqueId();
             $initials = strtoupper(substr($name, 0, 1) . substr($surname, 0, 1));
 
-
-            // Check if record already exists
-
-            // $recordExists = false;
-
-            // foreach ($records as $record) {
-            //     if ($record['Name'] == $name && $record['Surname'] == $surname && $record['Age'] == $age && $record['DateOfBirth'] == $dob) {
-            //         $recordExists = true;
-            //         break;
-            //     }
-            // }
-    
-            // // Write data to file
-            // if (!$recordExists) {
-            //     $data = array($id, $name, $surname, $initials, $age, $dob);
-            //     fwrite($handle, implode(',', $data) . "\n");
-            //     $records[] = array('Name' => $name, 'Surname' => $surname, 'Age' => $age, 'DateOfBirth' => $dob);
-            // }
-
             // Check if record already exists
             if (!isset($records[$id])) {
                 // Write data to file
