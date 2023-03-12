@@ -55,18 +55,35 @@
         // Write column headers
         fputcsv($handle, array('Id', 'Name', 'Surname', 'Initials', 'Age', 'DateOfBirth'));
 
+        // Initialize array to store generated records
+        $records = array();
+
         
-        
-        for ($index = 0; $index < $numRecords; $index++) {
+        while (count($records) < $numRecords) {
+        // for ($index = 0; $index < $numRecords; $index++) {
             $name = $names[array_rand($names)];
             $surname = $surnames[array_rand($surnames)];
             $age = rand(18, 100);
             $dob = date('d/m/Y', strtotime('-' . rand(18, 60) . ' years'));
             $id = generateUniqueId();
             $initials = strtoupper(substr($name, 0, 1) . substr($surname, 0, 1));
+
+
+            // Check if record already exists
+            $recordExists = false;
+
+            foreach ($records as $record) {
+                if ($record['Name'] == $name && $record['Surname'] == $surname && $record['Age'] == $age && $record['DateOfBirth'] == $dob) {
+                    $recordExists = true;
+                    break;
+                }
+            }
     
             // Write data to file
-            fputcsv($handle, array($id, $name, $surname, $initials, $age, $dob));
+            if (!$recordExists) {
+                fputcsv($handle, array($id, $name, $surname, $initials, $age, $dob));
+                $records[] = array('Name' => $name, 'Surname' => $surname, 'Age' => $age, 'DateOfBirth' => $dob);
+            }
         }
         
         fclose($handle);
@@ -86,7 +103,13 @@
         return $id;
     }
 
-    generateCSV(3);
+    if (isset($_POST['submit'])) {
+        generateCSV($_POST['nor']);
+
+        echo " File found at " . __DIR__ . "/output/" . "output.csv";
+    }
+
+    
 
 ?>
 
@@ -94,7 +117,7 @@
     <head>
         <!-- style=" background-color: rgb(61, 65, 61); color: white" -->
         <div class="header"> 
-            <h2>Proficieny Test 1</h2>
+            <h2>Proficieny Test 2</h2>
         </div>
 
         <link rel="stylesheet" href="style.css">
@@ -102,21 +125,17 @@
     </head>
 
     <body>
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" enctype="multipart/form-data">
             
             <div class="fields">
 
-                <div><input type="text" id="name" name="name" placeholder="Name" value="<?php echo isset($_POST['name']) ? $_POST['name'] : ''; ?>"></div>
-                
-                <div><input type="text" id="surname" name="surname" placeholder="Surname" value="<?php echo isset($_POST['surname']) ? $_POST['surname'] : ''; ?>"></div>
+                <div><input type="text" id="nor" name="nor" placeholder="Number of Rows"></div>
 
-                <div><input type="number" id="id" name="id" placeholder="ID Number" maxlength="13" value="<?php echo isset($_POST['id']) ? $_POST['id'] : ''; ?>"></div>
+                <div><button type="submit" name="submit"> Generate CSV File </button></div>
 
-                <div><input type="text" id="dob" name="dob" placeholder="Date of Birth" value="<?php echo isset($_POST['dob']) ? $_POST['dob'] : ''; ?>"></div>
+                <div><input type="file" name="csv_file" id="csv_file" placeholder="upload file"></div>                
 
-                <div><button type="submit" name="submit"> Submit </button></div>
-
-                <div><button name="cancel"> Cancel </button></div>
+                <div><button name="cancel"> Import CSV File to SQLite Database </button></div>
 
             </div>
             
