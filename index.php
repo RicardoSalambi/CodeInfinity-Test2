@@ -103,10 +103,66 @@
         return $id;
     }
 
+    function importIntoDB($csvFilePath){
+        // Open the SQLite database
+        $dbfile = "test.db";
+        $db = new PDO("sqlite:" . $dbfile);
+
+        // Create the table
+        $db->exec("CREATE TABLE IF NOT EXISTS csv_import (
+                    Id TEXT PRIMARY KEY,
+                    Name TEXT,
+                    Surname TEXT,
+                    Initials TEXT,
+                    Age INTEGER,
+                    DateOfBirth TEXT)");
+
+        // Open the CSV file
+        // $filename = "output.csv";
+        // $filepath = __DIR__ . "/output/" . $filename;
+
+        $file = fopen($csvFilePath, "r");
+
+        // Read and discard the header row
+        $header = fgetcsv($file);
+
+        // Loop through each row in the CSV file
+        while (($data = fgetcsv($file)) !== FALSE) {
+        // Insert the row into the database table
+        $stmt = $db->prepare("INSERT INTO csv_import (Id, Name, Surname, Initials, Age, DateOfBirth) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt -> bindParam(1, $data[0]);
+        $stmt->bindParam(2, $data[1]);
+        $stmt->bindParam(3, $data[2]);
+        $stmt->bindParam(4, $data[3]);
+        $stmt->bindParam(5, $data[4]);
+        $stmt->bindParam(6, $data[5]);
+        $stmt->execute();
+        }
+
+        // Close the file and database connection
+        fclose($file);
+        $db = null;
+
+        echo "Data imported successfully.";
+    }
+
     if (isset($_POST['submit'])) {
         generateCSV($_POST['nor']);
 
         echo " File found at " . __DIR__ . "/output/" . "output.csv";
+    }
+
+    if (isset($_POST['import'])) {
+
+        // print_r($_FILES['file']);
+        
+        if(!empty($_FILES['file']['name'])) {
+            // file has been submitted
+            importIntoDB($_FILES['file']['tmp_name']);
+        } else {
+            echo "file has not been submitted";
+        }
+
     }
 
     
@@ -133,9 +189,9 @@
 
                 <div><button type="submit" name="submit"> Generate CSV File </button></div>
 
-                <div><input type="file" name="csv_file" id="csv_file" placeholder="upload file"></div>                
+                <div><input type="file" name="file" placeholder="upload file"></div>                
 
-                <div><button name="cancel"> Import CSV File to SQLite Database </button></div>
+                <div><button name="import"> Import CSV File to SQLite Database </button></div>
 
             </div>
             
