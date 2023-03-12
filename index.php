@@ -50,6 +50,14 @@
             'Martin'
         );
 
+        // Output folder
+        $output_folder = 'output';
+
+        // Check if the output folder exists, and create it if it doesn't
+        if (!file_exists($output_folder)) {
+            mkdir($output_folder);
+        }
+
         $handle = fopen('output/output.csv', 'w');
     
         // Write column headers
