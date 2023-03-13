@@ -3,7 +3,7 @@
     ini_set('upload_max_filesize', '50M');
 
     // Set maximum allowed POST data size to 100 MB
-    ini_set('post_max_size', '1024M');
+    ini_set('post_max_size', '50M');
 
     // Set maximum execution time to 300 seconds
     ini_set('max_execution_time', '300');
@@ -127,9 +127,6 @@
                     DateOfBirth TEXT)");
 
         // Open the CSV file
-        // $filename = "output.csv";
-        // $filepath = __DIR__ . "/output/" . $filename;
-
         $file = fopen($csvFilePath, "r");
 
         // Read and discard the header row
@@ -137,15 +134,17 @@
 
         // Loop through each row in the CSV file
         while (($data = fgetcsv($file)) !== FALSE) {
-        // Insert the row into the database table
-        $stmt = $db->prepare("INSERT INTO csv_import (Id, Name, Surname, Initials, Age, DateOfBirth) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt -> bindParam(1, $data[0]);
-        $stmt->bindParam(2, $data[1]);
-        $stmt->bindParam(3, $data[2]);
-        $stmt->bindParam(4, $data[3]);
-        $stmt->bindParam(5, $data[4]);
-        $stmt->bindParam(6, $data[5]);
-        $stmt->execute();
+
+            // Insert the row into the database table
+            $stmt = $db->prepare("INSERT INTO csv_import (Id, Name, Surname, Initials, Age, DateOfBirth) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt -> bindParam(1, $data[0]);
+            $stmt->bindParam(2, $data[1]);
+            $stmt->bindParam(3, $data[2]);
+            $stmt->bindParam(4, $data[3]);
+            $stmt->bindParam(5, $data[4]);
+            $stmt->bindParam(6, $data[5]);
+            $stmt->execute();
+
         }
 
         // Close the file and database connection
@@ -185,11 +184,7 @@
 ?>
 
 <html>
-    <head>
-        <!-- style=" background-color: rgb(61, 65, 61); color: white" -->
-        <div class="header"> 
-            <h2>Proficieny Test 2</h2>
-        </div>
+    <head>       
 
         <link rel="stylesheet" href="style.css">
 
@@ -199,6 +194,8 @@
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" enctype="multipart/form-data">
             
             <div class="fields">
+
+                <div class="header"> <h2>Proficieny Test 2</h2> </div>
 
                 <div><input type="number" id="nor" name="nor" placeholder="Number of Rows"></div>
 
