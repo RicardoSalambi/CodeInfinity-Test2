@@ -205,6 +205,8 @@
 
                 <div><button name="import"> Import CSV File to SQLite Database </button></div>
 
+                <div><input class="errorsArea" type="textarea" name="errors" value="<?php echo isset($_POST['errors']) ? $_POST['errors'] : ''; ?>"></div>
+
             </div>
             
 
