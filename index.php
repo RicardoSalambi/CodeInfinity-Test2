@@ -1,5 +1,14 @@
 <?php  
-    
+    // Set maximum allowed file size to 50 MB
+    ini_set('upload_max_filesize', '50M');
+
+    // Set maximum allowed POST data size to 100 MB
+    ini_set('post_max_size', '1024M');
+
+    // Set maximum execution time to 300 seconds
+    ini_set('max_execution_time', '300');
+
+    // Set memory limit to 512 MB
     ini_set('memory_limit', '-1');
 
     function generateCSV($numRecords) {
@@ -73,7 +82,7 @@
             $name = $names[array_rand($names)];
             $surname = $surnames[array_rand($surnames)];
             $age = rand(18, 100);
-            $dob = date('d/m/Y', strtotime('-' . rand(18, 60) . ' years'));
+            $dob = date('d/m/Y', strtotime('-' . rand(18, 100) . ' years'));
             $id = generateUniqueId();
             $initials = strtoupper(substr($name, 0, 1) . substr($surname, 0, 1));
 
@@ -147,9 +156,15 @@
     }
 
     if (isset($_POST['submit'])) {
-        generateCSV($_POST['nor']);
 
-        echo " File found at " . __DIR__ . "/output/" . "output.csv";
+        if(empty($_POST['nor'])) {
+            echo 'Please input the number of rows needed';
+        } else {
+            generateCSV($_POST['nor']);
+            echo " File found at " . __DIR__ . "/output/" . "output.csv";
+        }      
+        
+        
     }
 
     if (isset($_POST['import'])) {
