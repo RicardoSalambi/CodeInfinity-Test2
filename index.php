@@ -200,7 +200,7 @@
             
             <div class="fields">
 
-                <div><input type="text" id="nor" name="nor" placeholder="Number of Rows"></div>
+                <div><input type="number" id="nor" name="nor" placeholder="Number of Rows"></div>
 
                 <div><button type="submit" name="submit"> Generate CSV File </button></div>
 
